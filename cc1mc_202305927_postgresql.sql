@@ -6,6 +6,9 @@
 
 drop database if exists uvv;
 
+--Verificar se o schema lojas existe e exclui-lo
+drop schema if exists lojas;
+
 --Verificar se o usuario alexandre existe e exclui-lo
 
 drop user if exists alexandre ;
@@ -16,9 +19,9 @@ drop role if exists alexandre ;
 
 
 
---Criar usuario e trocar de usuario 
+--Criar usuario alexandre
 
-CREATE USER alexandre WITH CREATEDB CREATEROLE encrypted password '12345';
+CREATE USER alexandre WITH CREATEDB CREATEROLE encrypted password '31052005
 
 
 
@@ -37,14 +40,14 @@ allow_connections= true
 
 --
 
-\setenv PGPASSWORD 12345
+\setenv PGPASSWORD 31052005
 
 --Permissao total ao usuario alexandre para o database uvv 
 
 GRANT ALL ON database uvv TO alexandre;
 
 
---Usar database uvv 
+--Usar database uvv com usuario alexandre
 
 \c uvv alexandre ;
 
@@ -61,7 +64,7 @@ CREATE SCHEMA lojas authorization alexandre;
 --Comentarios schema lojas 
 
 COMMENT ON SCHEMA lojas 
-    IS 'schema de lojas da uvv';
+    IS 'schema de lojas do banco de dados uvv';
    
 
 
@@ -77,7 +80,7 @@ alter schema lojas owner to alexandre;
 
 
 
---Criar tabela produtos
+--Criar tabela produtos no schema lojas
 
 CREATE TABLE lojas.produtos (
                 produto_id                 		NUMERIC(38)  NOT NULL,
@@ -92,7 +95,7 @@ CREATE TABLE lojas.produtos (
                 
                 
                 
---Definindo a Pk da tabela                  
+--Definindo a Pk da tabela produtos                 
                 
 CONSTRAINT pk_produtos PRIMARY KEY (produto_id)
 
@@ -114,7 +117,7 @@ COMMENT ON COLUMN lojas.produtos.imagem_charset 				IS              'formato de 
 COMMENT ON COLUMN lojas.produtos.imagem_ultima_atualizacao 		IS     			'data da ultima atualizacao da imagem do produto';
 
 
---Criar tabela lojas
+--Criar tabela lojas no schema lojas
 
 
 CREATE TABLE lojas.lojas (
@@ -131,7 +134,7 @@ CREATE TABLE lojas.lojas (
                 logo_ultima_atualizacao 	DATE,
                 
                 
---Definindo a Pk da tabela                  
+--Definindo a Pk da tabela lojas                
 
 CONSTRAINT pk_lojas PRIMARY KEY (loja_id)
 
@@ -153,7 +156,7 @@ COMMENT ON COLUMN lojas.lojas.logo_charset 				IS 				'formato de codificacao ut
 COMMENT ON COLUMN lojas.lojas.logo_arquivo 				IS 				'arquivo da logo';
 COMMENT ON COLUMN lojas.lojas.logo_ultima_atualizacao   IS 				'data da ultima atualizacao da logo';
 
---Criar tabela estoques 
+--Criar tabela estoques no schema lojas
 
 
 CREATE TABLE lojas.estoques (
@@ -163,7 +166,7 @@ CREATE TABLE lojas.estoques (
                 quantidade 			NUMERIC(38) NOT NULL,
                 
                 
---Definindo a Pk da tabela  
+--Definindo a Pk da tabela estoques
 
 
 CONSTRAINT pk_estoques PRIMARY KEY (estoque_id)
@@ -187,7 +190,7 @@ COMMENT ON COLUMN lojas.estoques.quantidade			IS 	    'quantidade de produtos no
 
 
 
---Criar tabela clientes
+--Criar tabela clientes no schema lojas
 
 
 
@@ -202,7 +205,7 @@ CREATE TABLE lojas.clientes (
                 telefone3 				VARCHAR(20),
                 
                 
---Definindo a Pk da tabela  
+--Definindo a Pk da tabela clientes
 
                 
 CONSTRAINT pk_clientes PRIMARY KEY (cliente_Id)
@@ -227,7 +230,7 @@ COMMENT ON COLUMN lojas.clientes.telefone3 			IS 		'terceiro telefone do cliente
 
 
 
---Criar tabela envios 
+--Criar tabela envios no schema lojas
 
 
 CREATE TABLE lojas.envios (
@@ -240,7 +243,7 @@ CREATE TABLE lojas.envios (
                 
 
                 
---Definindo a Pk da tabela  
+--Definindo a Pk da tabela envios
                 
 CONSTRAINT pk_envios PRIMARY KEY (envio_id)
 
@@ -264,7 +267,7 @@ COMMENT ON COLUMN lojas.envios.status 				IS 		'status do envio';
 
 
 
---Criar tabela pedidos 
+--Criar tabela pedidos no schema lojas
 
 
 
@@ -278,7 +281,7 @@ CREATE TABLE lojas.pedidos (
                 loja_id 				NUMERIC(38) NOT NULL,
                 
                 
---Definindo a Pk da tabela                  
+--Definindo a Pk da tabela pedidos                
                 
 CONSTRAINT pk_pedidos PRIMARY KEY (pedido_id)
 
@@ -300,7 +303,7 @@ COMMENT ON COLUMN lojas.pedidos.loja_id          IS 		'FK.id para identificar as
 
 
 
---Criar tabela pedidos_itens
+--Criar tabela pedidos_itens no schema lojas 
 
 
 
@@ -314,7 +317,7 @@ CREATE TABLE lojas.pedidos_itens (
                 envio_id 		 				NUMERIC(38),
                 
 
---Definindo a Pk da tabela                 
+--Definindo a Pk da tabela pedidos_itens              
                 
                 
                 
@@ -331,7 +334,7 @@ CONSTRAINT pk_pedidos_itens PRIMARY KEY (pedido_id, produto_id)
 
 
 
-COMMENT ON TABLE  lojas.pedidos_itens                     IS 				'tabela referente a dados dos pedidos e e ao estoque';
+COMMENT ON TABLE  lojas.pedidos_itens                    IS 				'tabela referente a dados dos pedidos e e ao estoque';
 COMMENT ON COLUMN lojas.pedidos_itens.pedido_id          IS 				'FK.ID do pedido realizado pelo cliente';
 COMMENT ON COLUMN lojas.pedidos_itens.produto_id         IS 				'FK.id de identificao do produto';
 COMMENT ON COLUMN lojas.pedidos_itens.numero_da_linha    IS 				'numero da linha do pedido';
@@ -347,6 +350,8 @@ COMMENT ON COLUMN lojas.pedidos_itens.envio_id 			 IS 				'FK.id de identificaca
 --Chaves estrangeiras
 
 
+--Adiciona uma FK da tabela lojas.produtos na tabela lojas.estoques (produto_id)
+
 
 ALTER TABLE lojas.estoques ADD CONSTRAINT produtos_estoques_fk
 FOREIGN KEY (produto_id)
@@ -355,12 +360,16 @@ ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
+--Adiciona uma FK da tabela lojas.produtos na tabela lojas.pedidos_itens(produto_id)
+
 ALTER TABLE lojas.pedidos_itens ADD CONSTRAINT produtos_pedidos_itens_fk
 FOREIGN KEY (produto_id)
 REFERENCES lojas.produtos (produto_id)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
+
+--Adiciona uma FK da tabela lojas.lojas na tabela lojas.pedidos(loja_id)
 
 ALTER TABLE lojas.pedidos ADD CONSTRAINT lojas_pedidos_fk
 FOREIGN KEY (loja_id)
@@ -369,12 +378,16 @@ ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
+--Adiciona uma FK da tabela lojas.lojas na tabela lojas.envios(loja_id)
+
 ALTER TABLE lojas.envios ADD CONSTRAINT lojas_envios_fk
 FOREIGN KEY (loja_id)
 REFERENCES lojas.lojas (loja_id)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
+
+--Adiciona uma FK da tabela lojas.lojas na tabela lojas.estoques (loja_id)
 
 ALTER TABLE lojas.estoques ADD CONSTRAINT lojas_estoques_fk
 FOREIGN KEY (loja_id)
@@ -383,12 +396,16 @@ ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
+--Adiciona uma FK da tabela lojas.clientes na tabela lojas.pedidos(cliente_Id)
+
 ALTER TABLE lojas.pedidos ADD CONSTRAINT clientes_pedidos_fk
 FOREIGN KEY (cliente_Id)
 REFERENCES lojas.clientes (cliente_Id)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
+
+--Adiciona uma FK da tabela lojas.clientes na tabela lojas.envios(cliente_Id)
 
 ALTER TABLE lojas.envios ADD CONSTRAINT clientes_envios_fk
 FOREIGN KEY (cliente_Id)
@@ -397,12 +414,16 @@ ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
+--Adiciona uma FK na tabela lojas.envios na tabela lojas.pedidos_itens(envio_id)
+
 ALTER TABLE lojas.pedidos_itens ADD CONSTRAINT envios_pedidos_itens_fk
 FOREIGN KEY (envio_id)
 REFERENCES lojas.envios (envio_id)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
+
+--Adiciona uma FK na tabela lojas.pedidos na tabela lojas.pedidos_itens(pedido_id)
 
 ALTER TABLE lojas.pedidos_itens ADD CONSTRAINT pedidos_pedidos_itens_fk
 FOREIGN KEY (pedido_id)
@@ -415,7 +436,7 @@ NOT DEFERRABLE;
 --Restricoes das insercoes de dados
 
 
---Checks da tabela clientes
+--Restricoes da tabela clientes
 
 ALTER TABLE lojas.clientes
 ADD CONSTRAINT cc_clientes_email
@@ -424,9 +445,21 @@ CHECK (email ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$');
 
 ALTER TABLE lojas.clientes 
 ADD CONSTRAINT cc_clientes_cliente_id
-CHECK(cliente_id > 0);
+CHECK(cliente_id >= 0);
 
---Checks da tabela pedidos_itens
+ALTER TABLE lojas.clientes
+ADD CONSTRAINT cc_clientes_telefone1
+CHECK ((telefone1~ '^[0-9]{10,}$');
+
+ALTER TABLE lojas.clientes
+ADD CONSTRAINT cc_clientes_telefone2
+CHECK ((telefone2 '^[0-9]{10,}$');
+       
+ALTER TABLE lojas.clientes
+ADD CONSTRAINT cc_clientes_telefone3
+CHECK ((telefone3^[0-9]{10,}$');       
+
+--Restricoes da tabela pedidos_itens 
 
 
 ALTER TABLE lojas.pedidos_itens 
@@ -437,7 +470,7 @@ ALTER TABLE lojas.pedidos_itens
 ADD CONSTRAINT cc_pedidos_itens_quantidade
 CHECK(quantidade >= 0);
 
---Checks da tabela lojas 
+--Restricoes da tabela lojas
 
 ALTER TABLE lojas 
 ADD CONSTRAINT cc_lojas_endereco
@@ -456,7 +489,7 @@ ALTER TABLE lojas.lojas
 ADD CONSTRAINT cc_lojas_loja_id 
 CHECK(loja_id >= 0);
 
---Checks da tabela produtos
+--Restricoes da tabela produtos 
 
 
 ALTER TABLE lojas.produtos 
@@ -467,7 +500,7 @@ ALTER TABLE lojas.produtos
 ADD CONSTRAINT cc_produtos_produto_id
 CHECK(produto_id >= 0 );
 
---Checks da tabela pedidos 
+--Restricoes da tabela pedidos
 
 ALTER TABLE lojas.pedidos 
 ADD CONSTRAINT cc_pedidos_pedido_id
@@ -475,7 +508,7 @@ CHECK(pedido_id >= 0);
 
 
 
---Checks da tabela estoques
+--Restricoes da tabela estoques
 
 
 ALTER TABLE lojas.estoques
@@ -487,7 +520,7 @@ ALTER TABLE lojas.estoques
 ADD CONSTRAINT cc_estoques_quantidade
 CHECK(quantidade >= 0);
 
---Checks da tabela envios 
+--Restricoes da tabela envios 
 
 
 ALTER TABLE lojas.envios 
