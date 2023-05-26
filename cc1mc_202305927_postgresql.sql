@@ -38,7 +38,7 @@ lc_ctype= 'pt_BR.UTF-8'
 allow_connections= true
 ;
 
---
+--Definir a variavel PGPASSWORD como a senha do usuario alexandre
 
 \setenv PGPASSWORD 31052005
 
