@@ -19,9 +19,13 @@ drop role if exists alexandre ;
 
 
 
---Criar usuario alexandre
+--Criar usuario alexandre com senha criptografada
 
-CREATE USER alexandre WITH CREATEDB CREATEROLE encrypted password '31052005
+CREATE USER alexandre 
+WITH 
+CREATEDB 
+CREATEROLE 
+ENCRYPTED PASSWORD '31052005'
 
 
 
