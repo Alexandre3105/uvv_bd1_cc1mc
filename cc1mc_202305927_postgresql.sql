@@ -35,6 +35,8 @@ lc_ctype= 'pt_BR.UTF-8'
 allow_connections= true
 ;
 
+--
+
 \setenv PGPASSWORD 12345
 
 --Permissao total ao usuario alexandre para o database uvv 
@@ -410,7 +412,7 @@ ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
 
---Checagens dos dados inseridos 
+--Restricoes das insercoes de dados
 
 
 --Checks da tabela clientes
@@ -429,11 +431,11 @@ CHECK(cliente_id > 0);
 
 ALTER TABLE lojas.pedidos_itens 
 ADD CONSTRAINT cc_pedidos_itens_preco_unitario 
-CHECK( preco_unitario > 0);
+CHECK( preco_unitario >= 0);
 
 ALTER TABLE lojas.pedidos_itens 
 ADD CONSTRAINT cc_pedidos_itens_quantidade
-CHECK(quantidade > 0);
+CHECK(quantidade >= 0);
 
 --Checks da tabela lojas 
 
@@ -452,24 +454,24 @@ CHECK(longitude BETWEEN 0 AND 180 );
 
 ALTER TABLE lojas.lojas
 ADD CONSTRAINT cc_lojas_loja_id 
-CHECK(loja_id > 0);
+CHECK(loja_id >= 0);
 
 --Checks da tabela produtos
 
 
 ALTER TABLE lojas.produtos 
 ADD CONSTRAINT cc_produtos_preco_unitario 
-CHECK(preco_unitario > 0);
+CHECK(preco_unitario >= 0);
 
 ALTER TABLE lojas.produtos 
 ADD CONSTRAINT cc_produtos_produto_id
-CHECK(produto_id > 0 );
+CHECK(produto_id >= 0 );
 
 --Checks da tabela pedidos 
 
 ALTER TABLE lojas.pedidos 
 ADD CONSTRAINT cc_pedidos_pedido_id
-CHECK(pedido_id > 0);
+CHECK(pedido_id >= 0);
 
 
 
@@ -478,19 +480,19 @@ CHECK(pedido_id > 0);
 
 ALTER TABLE lojas.estoques
 ADD CONSTRAINT cc_estoques_estoque_id
-CHECK(estoque_id > 0);
+CHECK(estoque_id >= 0);
 
 
 ALTER TABLE lojas.estoques
 ADD CONSTRAINT cc_estoques_quantidade
-CHECK(quantidade > 0);
+CHECK(quantidade >= 0);
 
 --Checks da tabela envios 
 
 
 ALTER TABLE lojas.envios 
 ADD CONSTRAINT cc_envios_envio_id
-CHECK(envio_id > 0);
+CHECK(envio_id >= 0);
 
 
 
