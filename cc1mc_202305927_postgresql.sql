@@ -460,6 +460,10 @@ NOT DEFERRABLE;
 
 --Restricoes da tabela clientes
 
+ALTER TABLE         lojas.clientes
+ADD CONSTRAINT      cc_clientes_nome
+CHECK               (nome ~ '^[A-Za-z]+$');
+
 ALTER TABLE 		lojas.clientes
 ADD CONSTRAINT 		cc_clientes_email
 CHECK 				(email ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$');
