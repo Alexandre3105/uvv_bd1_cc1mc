@@ -27,6 +27,7 @@ Nesse __script__ foi criado o banco de dados __uvv__ dentro do schema lojas , ne
 Arquivo em __.pdf__ do *diagrama* do projeto logico do banco de dados uvv 
 
 
+
 ## Diagrama.arquitecht 
 
 Arquivo em __.arquitecht__ para abrir em for editavel com o *SQL POWER ARQUITECHT*
