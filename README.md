@@ -2,6 +2,7 @@
 ***
 __Esse Repositório contem os arquivos do Projeto de banco de dados logico da uvv e foi criado com intuito acadêmico apenas.__
 
+## Este projeto contém :
 1. Script global 
 1. Diagrama em formato pdf 
 1. Diagrama no formato architect
