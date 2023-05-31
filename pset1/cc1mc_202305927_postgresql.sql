@@ -59,7 +59,7 @@ COMMENT ON DATABASE uvv
     IS 'Banco de dados geral da uvv';
 
 
---Criar schema lojas 
+--Criar schema lojas com permissao para o usuario alexandre
 
 CREATE SCHEMA lojas authorization alexandre;
 
@@ -374,7 +374,7 @@ COMMENT ON COLUMN lojas.pedidos_itens.envio_id 			 IS 				'FK da tabela envios.i
 --Chaves estrangeiras--
 
 
---Adiciona uma FK da tabela lojas.produtos na tabela lojas.estoques (produto_id)
+--Adiciona uma FK da tabela produtos na tabela estoques (produto_id)
 
 
 ALTER TABLE lojas.estoques ADD CONSTRAINT produtos_estoques_fk
@@ -384,7 +384,7 @@ ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
---Adiciona uma FK da tabela lojas.produtos na tabela lojas.pedidos_itens(produto_id)
+--Adiciona uma FK da tabela produtos na tabela pedidos_itens(produto_id)
 
 ALTER TABLE lojas.pedidos_itens ADD CONSTRAINT produtos_pedidos_itens_fk
 FOREIGN KEY (produto_id)
@@ -393,7 +393,7 @@ ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
---Adiciona uma FK da tabela lojas.lojas na tabela lojas.pedidos(loja_id)
+--Adiciona uma FK da tabela lojas na tabela pedidos(loja_id)
 
 ALTER TABLE lojas.pedidos ADD CONSTRAINT lojas_pedidos_fk
 FOREIGN KEY (loja_id)
@@ -402,7 +402,7 @@ ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
---Adiciona uma FK da tabela lojas.lojas na tabela lojas.envios(loja_id)
+--Adiciona uma FK da tabela lojas na tabela envios(loja_id)
 
 ALTER TABLE lojas.envios ADD CONSTRAINT lojas_envios_fk
 FOREIGN KEY (loja_id)
@@ -411,7 +411,7 @@ ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
---Adiciona uma FK da tabela lojas.lojas na tabela lojas.estoques (loja_id)
+--Adiciona uma FK da tabela lojas na tabela estoques (loja_id)
 
 ALTER TABLE lojas.estoques ADD CONSTRAINT lojas_estoques_fk
 FOREIGN KEY (loja_id)
@@ -420,7 +420,7 @@ ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
---Adiciona uma FK da tabela lojas.clientes na tabela lojas.pedidos(cliente_Id)
+--Adiciona uma FK da tabela clientes na tabela pedidos(cliente_Id)
 
 ALTER TABLE lojas.pedidos ADD CONSTRAINT clientes_pedidos_fk
 FOREIGN KEY (cliente_Id)
@@ -429,7 +429,7 @@ ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
---Adiciona uma FK da tabela lojas.clientes na tabela lojas.envios(cliente_Id)
+--Adiciona uma FK da tabela clientes na tabela envios(cliente_Id)
 
 ALTER TABLE lojas.envios ADD CONSTRAINT clientes_envios_fk
 FOREIGN KEY (cliente_Id)
@@ -438,7 +438,7 @@ ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
---Adiciona uma FK na tabela lojas.envios na tabela lojas.pedidos_itens(envio_id)
+--Adiciona uma FK na tabela envios na tabela pedidos_itens(envio_id)
 
 ALTER TABLE lojas.pedidos_itens ADD CONSTRAINT envios_pedidos_itens_fk
 FOREIGN KEY (envio_id)
@@ -447,7 +447,7 @@ ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
---Adiciona uma FK na tabela lojas.pedidos na tabela lojas.pedidos_itens(pedido_id)
+--Adiciona uma FK na tabela pedidos na tabela pedidos_itens(pedido_id)
 
 ALTER TABLE lojas.pedidos_itens ADD CONSTRAINT pedidos_pedidos_itens_fk
 FOREIGN KEY (pedido_id)
